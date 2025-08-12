@@ -113,7 +113,7 @@ const Dashboard = ({ user, onLogout }) => {
     try {
       setScanningWebsite(websiteId)
       setError('')
-      await apiCall('/api/dashboard/scan', {
+      await apiCall('/api/dashboard/scans', {
         method: 'POST',
         body: JSON.stringify({ website_id: websiteId, url: url })
       })
