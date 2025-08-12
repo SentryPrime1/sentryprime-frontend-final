@@ -508,6 +508,51 @@ const Dashboard = ({ user, onClose }) => {
                 </div>
               )}
             </div>
+{/* --- AI SCAN RESULTS DISPLAY --- */}
+{aiScanResults && (
+  <Card className="mt-6 border-blue-500 border-2">
+    <CardHeader>
+      <div className="flex justify-between items-center">
+        <div>
+          <CardTitle className="text-xl text-blue-700">AI-Enhanced Scan Report</CardTitle>
+          <CardDescription>Scan results for: {aiScanResults.url}</CardDescription>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => setAiScanResults(null)}>
+          <X className="h-4 w-4 mr-2" />
+          Close Report
+        </Button>
+      </div>
+    </CardHeader>
+    <CardContent>
+      {aiScanResults.results && aiScanResults.results.length > 0 ? (
+        <div className="space-y-4">
+          {aiScanResults.results.map((result, index) => (
+            <div key={index} className="p-4 border rounded-lg bg-gray-50">
+              <h4 className="font-bold text-md mb-2">{result.type}</h4>
+              <p className="text-sm text-gray-600 mb-2 font-mono bg-gray-200 p-2 rounded">
+                {result.element_tag}
+              </p>
+              <div className="mt-2 p-3 bg-blue-50 rounded">
+                <h5 className="font-semibold text-blue-800 mb-2">AI Recommendation:</h5>
+                {/* Use pre-wrap to respect newlines from the AI's response */}
+                <p className="text-sm text-gray-800 whitespace-pre-wrap">
+                  {result.ai_recommendation}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+          <p>No violations found for this scan!</p>
+        </div>
+      )}
+    </CardContent>
+  </Card>
+)}
+{/* --- END OF AI SCAN RESULTS DISPLAY --- */}
+
           </TabsContent>
 
           {/* Scans Tab */}
