@@ -40,16 +40,16 @@ const Dashboard = ({ user, onLogout }) => {
 
   const getAuthToken = () => localStorage.getItem('authToken')
 
-  // THIS IS THE CORRECTED FUNCTION
+  // THIS IS THE CORRECTED API CALL FUNCTION
   const apiCall = async (endpoint, options = {}) => {
     const token = getAuthToken()
     const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
     
     const response = await fetch(`${baseUrl}${endpoint}`, {
-      ...options, // Spread options here to allow method, body, etc.
+      ...options,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // This line is crucial
+        'Authorization': `Bearer ${token}`, // This correctly sends the token
         ...options.headers,
       },
     } )
@@ -58,8 +58,7 @@ const Dashboard = ({ user, onLogout }) => {
       const errorData = await response.json().catch(() => ({}))
       throw new Error(errorData.error || `HTTP ${response.status}`)
     }
-
-    // Handle cases where the response might be empty
+    
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
         return response.json();
