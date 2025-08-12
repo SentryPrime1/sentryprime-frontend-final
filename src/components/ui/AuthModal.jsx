@@ -19,7 +19,7 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
 
   // API call helper
   const apiCall = async (endpoint, data) => {
-    const baseUrl = import.meta.env.VITE_BACKEND_URL || '...' 'https://sentryprime-backend-clean-production.up.railway.app'
+const baseUrl = import.meta.env.VITE_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
     
     const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'POST',
