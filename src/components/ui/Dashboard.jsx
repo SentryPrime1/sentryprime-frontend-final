@@ -39,6 +39,7 @@ const Dashboard = ({ user, onClose }) => {
   const [newWebsiteName, setNewWebsiteName] = useState('')
   const [addingWebsite, setAddingWebsite] = useState(false)
   const [scanningWebsite, setScanningWebsite] = useState(null)
+  const [aiScanResults, setAiScanResults] = useState(null); // <-- ADDED THIS LINE
 
   // Get auth token from localStorage
   const getAuthToken = () => {
@@ -57,7 +58,7 @@ const Dashboard = ({ user, onClose }) => {
         ...options.headers
       },
       ...options
-    })
+    } )
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
@@ -124,29 +125,37 @@ const Dashboard = ({ user, onClose }) => {
     }
   }
 
-  // Trigger scan for website
+  // --- THIS ENTIRE FUNCTION HAS BEEN REPLACED ---
+  // Trigger AI-ENHANCED scan for website
   const triggerScan = async (websiteId, url) => {
     try {
-      setScanningWebsite(websiteId)
-      setError('')
+      setScanningWebsite(websiteId);
+      setError('');
+      setAiScanResults(null); // Clear previous AI results
 
-      await apiCall('/api/dashboard/scan', {
+      // Call the new AI endpoint
+      const results = await apiCall('/api/scan/ai-enhanced', {
         method: 'POST',
+        // The new endpoint only needs the URL
         body: JSON.stringify({
-          website_id: websiteId,
           url: url
         })
-      })
+      });
 
-      // Reload data to show new scan
-      await loadDashboardData()
+      // Save the detailed results to our new state
+      setAiScanResults(results);
+      
+      // We can still reload the dashboard data to update stats
+      await loadDashboardData();
+
     } catch (err) {
-      console.error('Failed to trigger scan:', err)
-      setError(`Failed to trigger scan: ${err.message}`)
+      console.error('Failed to trigger AI scan:', err);
+      setError(`Failed to trigger AI scan: ${err.message}`);
     } finally {
-      setScanningWebsite(null)
+      setScanningWebsite(null);
     }
-  }
+  };
+  // --- END OF REPLACED FUNCTION ---
 
   // Load data on component mount
   useEffect(() => {
@@ -408,7 +417,7 @@ const Dashboard = ({ user, onClose }) => {
                   <Input
                     placeholder="https://example.com"
                     value={newWebsiteUrl}
-                    onChange={(e) => setNewWebsiteUrl(e.target.value)}
+                    onChange={(e ) => setNewWebsiteUrl(e.target.value)}
                     disabled={addingWebsite}
                   />
                   <Input
@@ -630,4 +639,3 @@ const Dashboard = ({ user, onClose }) => {
 }
 
 export default Dashboard
-
