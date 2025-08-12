@@ -24,17 +24,15 @@ import {
   RefreshCw
 } from 'lucide-react'
 
-const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for clarity
+const Dashboard = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState('overview')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   
-  // State for dashboard data
   const [dashboardStats, setDashboardStats] = useState(null)
   const [websites, setWebsites] = useState([])
   const [scans, setScans] = useState([])
   
-  // State for forms
   const [newWebsiteUrl, setNewWebsiteUrl] = useState('')
   const [newWebsiteName, setNewWebsiteName] = useState('')
   const [addingWebsite, setAddingWebsite] = useState(false)
@@ -42,17 +40,18 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
 
   const getAuthToken = () => localStorage.getItem('authToken')
 
+  // THIS IS THE CORRECTED FUNCTION
   const apiCall = async (endpoint, options = {}) => {
     const token = getAuthToken()
     const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
     
     const response = await fetch(`${baseUrl}${endpoint}`, {
+      ...options, // Spread options here to allow method, body, etc.
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        ...options.headers
+        'Authorization': `Bearer ${token}`, // This line is crucial
+        ...options.headers,
       },
-      ...options
     } )
 
     if (!response.ok) {
@@ -60,7 +59,13 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
       throw new Error(errorData.error || `HTTP ${response.status}`)
     }
 
-    return response.json()
+    // Handle cases where the response might be empty
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json();
+    } else {
+        return; 
+    }
   }
 
   const loadDashboardData = async () => {
@@ -194,7 +199,6 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            {/* Overview Content */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardHeader><CardTitle>Total Websites</CardTitle></CardHeader>
@@ -216,7 +220,6 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
           </TabsContent>
 
           <TabsContent value="websites" className="space-y-6">
-            {/* Add Website Form */}
             <Card>
               <CardHeader><CardTitle>Add New Website</CardTitle></CardHeader>
               <CardContent>
@@ -229,7 +232,6 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
                 </div>
               </CardContent>
             </Card>
-            {/* Websites Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {websites.map((website) => (
                 <Card key={website.id}>
@@ -251,7 +253,6 @@ const Dashboard = ({ user, onLogout }) => { // Changed onClose to onLogout for c
           </TabsContent>
           
           <TabsContent value="scans">
-             {/* Scans Table */}
              <Card>
               <CardHeader><CardTitle>Scan History</CardTitle></CardHeader>
               <CardContent>
