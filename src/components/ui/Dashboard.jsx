@@ -49,7 +49,7 @@ const Dashboard = ({ user, onClose }) => {
   // API call helper
   const apiCall = async (endpoint, options = {}) => {
     const token = getAuthToken()
-    const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://web-production-51f3.up.railway.app'
+    const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
     
     const response = await fetch(`${baseUrl}${endpoint}`, {
       headers: {
