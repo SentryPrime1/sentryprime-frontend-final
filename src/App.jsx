@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
-import Dashboard from '@/components/Dashboard.jsx' // Corrected path
+import Dashboard from '@/components/ui/Dashboard.jsx'
 import AuthModal from '@/components/ui/AuthModal.jsx'
 
 function App() {
