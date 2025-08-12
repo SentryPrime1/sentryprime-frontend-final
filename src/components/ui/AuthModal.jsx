@@ -49,10 +49,10 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
     setError('')
     try {
       const data = await apiCall('/api/auth/login', { email, password })
-      if (onAuthSuccess) { // Check if the function exists before calling
+      if (onAuthSuccess) {
           onAuthSuccess(data)
       }
-      onClose() // Close the modal on success
+      onClose()
     } catch (err) {
       setError(err.message)
     } finally {
@@ -75,10 +75,10 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
     setError('')
     try {
       const data = await apiCall('/api/auth/register', { firstName, lastName, email, password })
-      if (onAuthSuccess) { // Check if the function exists before calling
+      if (onAuthSuccess) {
         onAuthSuccess(data)
       }
-      onClose() // Close the modal on success
+      onClose()
     } catch (err) {
       setError(err.message)
     } finally {
@@ -98,7 +98,7 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</T>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
 
             {error && (
