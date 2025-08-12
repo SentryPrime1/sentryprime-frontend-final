@@ -40,7 +40,6 @@ const Dashboard = ({ user, onLogout }) => {
 
   const getAuthToken = () => localStorage.getItem('authToken')
 
-  // THIS IS THE CORRECTED API CALL FUNCTION
   const apiCall = async (endpoint, options = {}) => {
     const token = getAuthToken()
     const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
@@ -49,7 +48,7 @@ const Dashboard = ({ user, onLogout }) => {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // This correctly sends the token
+        'Authorization': `Bearer ${token}`,
         ...options.headers,
       },
     } )
@@ -166,7 +165,7 @@ const Dashboard = ({ user, onLogout }) => {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py.4">
             <h1 className="text-xl font-bold text-gray-900">SentryPrime Dashboard</h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium text-gray-700">
@@ -204,6 +203,7 @@ const Dashboard = ({ user, onLogout }) => {
                 <CardContent><div className="text-2xl font-bold">{dashboardStats?.overview?.total_websites || 0}</div></CardContent>
               </Card>
               <Card>
+                .
                 <CardHeader><CardTitle>Avg. Compliance</CardTitle></CardHeader>
                 <CardContent><div className={`text-2xl font-bold ${getComplianceColor(dashboardStats?.overview?.avg_compliance_score || 0)}`}>{dashboardStats?.overview?.avg_compliance_score || 0}%</div></CardContent>
               </Card>
