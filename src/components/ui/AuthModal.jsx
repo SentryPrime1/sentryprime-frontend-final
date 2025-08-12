@@ -20,14 +20,13 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
   // API call helper
   const apiCall = async (endpoint, data) => {
     const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
-    console.log('Attempting to call backend at:', baseUrl ); // We can remove this later
-
+    
     const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data )
     })
 
     const responseData = await response.json()
@@ -50,8 +49,10 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
     setError('')
     try {
       const data = await apiCall('/api/auth/login', { email, password })
-      onAuthSuccess(data)
-      onClose()
+      if (onAuthSuccess) { // Check if the function exists before calling
+          onAuthSuccess(data)
+      }
+      onClose() // Close the modal on success
     } catch (err) {
       setError(err.message)
     } finally {
@@ -74,8 +75,10 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
     setError('')
     try {
       const data = await apiCall('/api/auth/register', { firstName, lastName, email, password })
-      onAuthSuccess(data)
-      onClose()
+      if (onAuthSuccess) { // Check if the function exists before calling
+        onAuthSuccess(data)
+      }
+      onClose() // Close the modal on success
     } catch (err) {
       setError(err.message)
     } finally {
@@ -95,7 +98,7 @@ const AuthModal = ({ onClose, onAuthSuccess }) => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</T>
             </TabsList>
 
             {error && (
