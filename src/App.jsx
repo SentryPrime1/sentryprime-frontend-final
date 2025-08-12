@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
-import Dashboard from '@/components/ui/Dashboard.jsx'
+import Dashboard from '@/components/Dashboard.jsx' // Corrected path
 import AuthModal from '@/components/ui/AuthModal.jsx'
 
 function App() {
@@ -8,13 +8,12 @@ function App() {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('authToken'))
 
-  // This function will be passed to the AuthModal
   const handleAuthSuccess = (authData) => {
     const { token, user } = authData
     localStorage.setItem('authToken', token)
     setToken(token)
     setUser(user)
-    setIsAuthModalOpen(false) // Close the modal on success
+    setIsAuthModalOpen(false)
   }
 
   const handleLogout = () => {
@@ -23,17 +22,21 @@ function App() {
     setUser(null)
   }
 
-  // If we have a token but no user data, we could fetch it here
-  // For now, we'll just check for the token's existence
   useEffect(() => {
-    if (token && !user) {
-      // In a real app, you'd verify the token with the backend and get user data
-      // For this version, we'll just set a placeholder user if a token exists
+    const storedToken = localStorage.getItem('authToken')
+    if (storedToken) {
+      // In a real app, you would verify the token with the backend here
+      // For now, we'll just assume the token is valid and set a placeholder user
+      // This ensures the dashboard loads on refresh if a token exists.
+      setToken(storedToken)
+      // You might want to decode the token to get user info if it's stored there
+      // For now, a simple placeholder will do.
       setUser({ firstName: 'User' }) 
     }
-  }, [token, user])
+  }, [])
 
   if (token) {
+    // Pass the actual user object and the logout handler to the Dashboard
     return <Dashboard user={user} onLogout={handleLogout} />
   }
 
@@ -52,7 +55,7 @@ function App() {
       {isAuthModalOpen && (
         <AuthModal 
           onClose={() => setIsAuthModalOpen(false)} 
-          onAuthSuccess={handleAuthSuccess} // This was the missing piece
+          onAuthSuccess={handleAuthSuccess}
         />
       )}
     </div>
