@@ -26,10 +26,16 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
     confirmPassword: ''
   })
 
-  const apiCall = async (endpoint, data) => {
-const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
-    const response = await fetch(`${baseUrl}${endpoint}`, {
-      method: 'POST',
+const apiCall = async (endpoint, data) => {
+  const baseUrl = process.env.REACT_APP_BACKEND_URL || 'https://sentryprime-backend-clean-production.up.railway.app'
+  
+  // --- ADD THIS LINE FOR DEBUGGING ---
+  console.log('Attempting to call backend at:', baseUrl ); 
+
+  const response = await fetch(`${baseUrl}${endpoint}`, {
+    method: 'POST',
+//...
+
       headers: {
         'Content-Type': 'application/json',
       },
